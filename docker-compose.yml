@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: ./my-project
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URL=http://13.201.75.176:3000
+    depends_on:
+      - backend
+    restart: always
+
+  backend:
+    build: ./server
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - JWT_SECRETKEY=chintapaktamtam
+      - MONGO_URI=mongodb+srv://ecommerce:ecommerce123@ecommerce.85s1apq.mongodb.net/?retryWrites=true&w=majority&appName=ecommerce
+    restart: always
