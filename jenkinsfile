@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    environment {
+        FRONTEND_PORT = "8080"
+        BACKEND_PORT = "3001"
+        DOCKER_COMPOSE_FILE = "docker-compose.jenkins.yml"
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo "Cloning project repository..."
+                git branch: 'jenkins', url: 'https://github.com/Muhammad-Daud-0/Shop-Sphere.git'
+            }
+        }
+
+        stage('Build & Run Containers') {
+            steps {
+                echo "Starting Docker Compose build..."
+                sh """
+                    docker-compose -f $DOCKER_COMPOSE_FILE down
+                    docker-compose -f $DOCKER_COMPOSE_FILE up --build -d
+                """
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo "Checking running containers..."
+                sh "docker ps --format 'table {{.Names}}\t{{.Ports}}\t{{.Status}}'"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Deployment successful!"
+            echo "Frontend: http://43.204.234.135:${FRONTEND_PORT}"
+            echo "Backend: http://43.204.234.135:${BACKEND_PORT}"
+        }
+        failure {
+            echo "Deployment failed. Check logs above."
+        }
+    }
+}
