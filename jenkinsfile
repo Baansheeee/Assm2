@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 echo "Cloning project repository..."
-                git branch: 'jenkins', url: 'https://github.com/Muhammad-Daud-0/Shop-Sphere.git'
+                git branch: 'jenkins', url: 'https://github.com/Baansheeee/Assm2.git'
             }
         }
 
