@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        FRONTEND_PORT = "8080"
+        FRONTEND_PORT = "8081"
         BACKEND_PORT = "3001"
         DOCKER_COMPOSE_FILE = "docker-compose.jenkins.yml"
     }
