@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         COMPOSE_PROJECT_NAME = "jenkins_ci_app"
+        VITE_API = "http://3.110.158.80:4000"   // ✅ Inject your frontend API endpoint here
     }
 
     stages {
@@ -48,9 +49,14 @@ pipeline {
 
         stage('Build and Run Application') {
             steps {
-                echo '🚀 Building and starting containers...'
+                echo '🚀 Building and starting containers (no cache)...'
                 sh '''
-                    docker compose up -d --build
+                    # Export VITE_API so Docker sees it
+                    export VITE_API=${VITE_API}
+
+                    # Rebuild everything without cache to pick up new .env and environment vars
+                    docker compose build --no-cache
+                    docker compose up -d
                 '''
             }
         }
