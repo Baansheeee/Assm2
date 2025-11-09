@@ -23,7 +23,7 @@ services:
     ports:
       - "8085:5173"  # Host 8085 → Container 5173 (Vite dev server)
     environment:
-      - VITE_API=http://backend_ci:3000  # Use backend container name for internal Docker network
+      - VITE_API=${VITE_API}   # Use backend container name for internal Docker network
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     depends_on:
       - backend
