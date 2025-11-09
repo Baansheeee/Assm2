@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         COMPOSE_PROJECT_NAME = "jenkins_ci_app"
-        VITE_API = "http://3.110.158.80:4000"   // ✅ Inject your frontend API endpoint here
+        VITE_API = "http://3.110.158.80:3000"   // ✅ Inject your frontend API endpoint here
     }
 
     stages {
