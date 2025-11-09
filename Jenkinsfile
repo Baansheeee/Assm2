@@ -66,11 +66,32 @@ pipeline {
             steps {
                 echo '🩺 Checking if backend and frontend are accessible...'
                 sh '''
-                    sleep 10
-                    echo "Backend (port 4000):"
-                    curl -I http://localhost:4000 || true
-                    echo "Frontend (port 8085):"
-                    curl -I http://localhost:8085 || true
+                    echo "⏳ Waiting up to 60s for backend and frontend to respond..."
+                    for i in {1..12}; do
+                      if curl -s http://localhost:4000 >/dev/null 2>&1; then
+                        echo "✅ Backend is responding on port 4000"
+                        break
+                      else
+                        echo "⏳ Waiting for backend... ($i/12)"
+                        sleep 5
+                      fi
+                    done
+
+                    for i in {1..12}; do
+                      if curl -s http://localhost:8085 >/dev/null 2>&1; then
+                        echo "✅ Frontend is responding on port 8085"
+                        break
+                      else
+                        echo "⏳ Waiting for frontend... ($i/12)"
+                        sleep 5
+                      fi
+                    done
+
+                    echo "🧾 Backend logs (last 20 lines):"
+                    docker logs backend_ci --tail 20 || true
+
+                    echo "🧾 Frontend logs (last 20 lines):"
+                    docker logs frontend_ci --tail 20 || true
                 '''
             }
         }
